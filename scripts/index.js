@@ -12,20 +12,27 @@ function playSong(songId) {
  * Creates a song DOM element based on a song object.
  */
 function createSongElement({ id, title, album, artist, duration, coverArt }) {
-    const children = []
-    const classes = []
-    const attrs = { onclick: `playSong(${id})` }
-    return createElement("div", children, classes, attrs)
+    const songEl = document.createElement("div")
+    songEl.appendChild(createElement("span", [id]))
+    songEl.appendChild(createElement("h1", [title]))
+    songEl.appendChild(createElement("span", [album]))
+    songEl.appendChild(createElement("span", [artist]))
+    songEl.appendChild(createElement("span", ["duration: "+ duration]))
+    songEl.appendChild(createElement("img", [], [], {src: coverArt}))
+
+    songEl.setAttribute(onclick, `playSong(${id})` )
+    return songEl
 }
 
 /**
  * Creates a playlist DOM element based on a playlist object.
  */
 function createPlaylistElement({ id, name, songs }) {
-    const children = []
-    const classes = []
-    const attrs = {}
-    return createElement("div", children, classes, attrs)
+    const playlistEl = document.createElement("div")
+    playlistEl.appendChild(createElement("span", [id]))
+    playlistEl.appendChild(createElement("h1", [name]))
+    playlistEl.appendChild(createElement("span", [songs]))
+    return playlistEl
 }
 
 /**
@@ -44,8 +51,12 @@ function createElement(tagName, children = [], classes = [], attributes = {}) {
     Elemen = document.createElement(tagName);
 
     //add children
-    for (const child of children) {
-        Elemen.textContent += child;
+    for (let child of children) {
+        console.log(typeof child);
+        if (typeof child === "string"){
+            child = document.createTextNode(child);
+        }
+            Elemen.appendChild(child);
     }
     //add classes
     for (const cls of classes) {
@@ -59,6 +70,5 @@ function createElement(tagName, children = [], classes = [], attributes = {}) {
 }
 
 // You can write more code below this line
-const as=createElement("h1", ["hejjjj", "ss"], ["cc"],{})
-const song = document.getElementById("songs")
-song.appendChild(as);
+const song = document.getElementById("playlists")
+song.appendChild = createElement("h1", ["shsh", "sssd"], [] ,{});
