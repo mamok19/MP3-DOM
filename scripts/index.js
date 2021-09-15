@@ -4,22 +4,25 @@
  *
  * @param {String} songId - the ID of the song to play
  */
+let currPlayedSongId = 0;
 function playSong(songId) {
-    console.log("chefeer")
+    if (currPlayedSongId)
+        document.getElementById(currPlayedSongId).style.backgroundColor = null
+    document.getElementById(songId).style.backgroundColor = 'green';
+    currPlayedSongId = songId;
 }
 
 /**
  * Creates a song DOM element based on a song object.
  */
 function createSongElement({ id, title, album, artist, duration, coverArt }) {
-    const songEl = document.createElement("div", [], [], {})
+    const songEl = createElement("div",[], ["songs"], {})
     songEl.setAttribute('id', id);
     songEl.appendChild(createElement("h1", [title]))
     songEl.appendChild(createElement("span", [album]))
-    songEl.appendChild(createElement("span", [artist]))
-    songEl.appendChild(createElement("span", [" duration: "+ duration]))
+    songEl.appendChild(createElement("h2", [artist]))
+    songEl.appendChild(createElement("span", [" duration: "+ fromSecondsToMinuts(duration)]))
     songEl.appendChild(createElement("img", [], [], {src: coverArt}))
-
     songEl.setAttribute('onclick', `playSong(${id})` )
     return songEl
 }
@@ -28,10 +31,11 @@ function createSongElement({ id, title, album, artist, duration, coverArt }) {
  * Creates a playlist DOM element based on a playlist object.
  */
 function createPlaylistElement({ id, name, songs }) {
-    const playlistEl = document.createElement("div", [], [], {})
+    const playlistEl = createElement("div", [], ["playlists"], {})
     playlistEl.setAttribute('id', id);
     playlistEl.appendChild(createElement("h1", [name]))
-    playlistEl.appendChild(createElement("span", songs))
+    playlistEl.appendChild(createElement("h3", "songs :" + songs.length))
+    playlistEl.appendChild(createElement("span",["  duration: " + fromSecondsToMinuts(playlistDuration(id))]))
     return playlistEl
 }
 
@@ -74,7 +78,41 @@ const playlists = document.getElementById("playlists")
 for (const song of player.songs){
     songs.appendChild(createSongElement(song));
 }
-for (const playlist of player.playlists){
-    console.log(playlist);
+for (let playlist of player.playlists){
     playlists.appendChild(createPlaylistElement(playlist));
 }
+
+// help functions
+function fromSecondsToMinuts(time){
+    const minuts = ('0' + Math.floor(time / 60)).slice(-2);
+    const seconds = ('0'+ time%60).slice(-2)
+    return (minuts + ':' + seconds)
+}
+
+function playlistDuration(id) {
+    let sum = 0
+    for (let i = 0; i < getPlaylistById(id).songs.length; i++) {
+      sum += getSongById(getPlaylistById(id).songs[i]).duration
+    }
+    return sum
+  }
+
+  function getPlaylistById(playlistId) {
+    for (let j = 0; j < player.playlists.length; j++) {
+      if (player.playlists[j].id === playlistId) {
+        return player.playlists[j]
+      }
+    }
+    throw 'non-existent playlist ID'
+  }
+
+  function getSongById(songId) {
+    for (let j = 0; j < player.songs.length; j++) {
+      if (player.songs[j].id === songId) {
+        return player.songs[j]
+      }
+    }
+    throw 'non-existent song ID'
+  }
+  
+  
