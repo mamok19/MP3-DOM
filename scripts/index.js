@@ -5,7 +5,15 @@
  * @param {String} songId - the ID of the song to play
  */
 let currPlayedSongId = 0;
+let timer = 0;
+setInterval(() => {
+    timer += 1;
+}, 1000);
+console.log(document.getElementById(currPlayedSongId))
 function playSong(songId) {
+    if (timer ===  document.getElementById(currPlayedSongId)){
+        document.getElementById(currPlayedSongId).style.backgroundColor = null
+    }
     if (currPlayedSongId)
         document.getElementById(currPlayedSongId).style.backgroundColor = null
     document.getElementById(songId).style.backgroundColor = 'green';
@@ -21,7 +29,7 @@ function createSongElement({ id, title, album, artist, duration, coverArt }) {
     songEl.appendChild(createElement("h1", [title]))
     songEl.appendChild(createElement("span", [album]))
     songEl.appendChild(createElement("h2", [artist]))
-    songEl.appendChild(createElement("span", [" duration: "+ fromSecondsToMinuts(duration)]))
+    songEl.appendChild(createElement("p", [" duration: "+ fromSecondsToMinuts(duration)]))
     songEl.appendChild(createElement("img", [], [], {src: coverArt}))
     songEl.setAttribute('onclick', `playSong(${id})` )
     return songEl
