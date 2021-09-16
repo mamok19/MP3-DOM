@@ -9,8 +9,11 @@ let timer = 0;
 setInterval(() => {
   if (currPlayedSongId){
     timer += 1;
+    console.log(getSongById(parseInt(currPlayedSongId)))
     if (timer ===  getSongById(currPlayedSongId).duration){
       document.getElementById(currPlayedSongId).style.backgroundColor = null
+      currPlayedSongId =  document.getElementById(currPlayedSongId).nextSibling.id
+      playSong(currPlayedSongId)
     }
   }
 }, 1000);
@@ -124,5 +127,12 @@ function playlistDuration(id) {
     }
     throw 'non-existent song ID'
   }
-  
-  
+
+  function findNextSong(id) {
+    
+
+  }
+
+  function changeColorByDuration(duration) {
+
+  }
