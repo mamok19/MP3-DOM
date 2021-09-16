@@ -26,3 +26,11 @@ body {
     width: 320px;
     padding: 10px;
 }
+
+.duration {
+    font-size: 20px;
+    width:min-content;
+    text-align: center;
+    float: center;
+    border-radius: 10px 10px 5px 5px ;
+}

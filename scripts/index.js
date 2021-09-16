@@ -40,7 +40,9 @@ function createSongElement({ id, title, album, artist, duration, coverArt }) {
     songEl.appendChild(createElement("h1", [title]))
     songEl.appendChild(createElement("span", [album]))
     songEl.appendChild(createElement("h2", [artist]))
-    songEl.appendChild(createElement("p", [" duration: "+ fromSecondsToMinuts(duration)]))
+    songEl.appendChild(createElement("p", [" duration "+ fromSecondsToMinuts(duration)],['duration'],{
+      style: `background-color:${changeColorByDuration(duration)};`,
+    }))
     songEl.appendChild(createElement("img", [], [], {src: coverArt}))
     songEl.setAttribute('onclick', `playSong(${id})` )
     return songEl
@@ -134,11 +136,20 @@ function playlistDuration(id) {
     throw 'non-existent song ID'
   }
 
-  function findNextSong(id) {
-    
-
-  }
-
   function changeColorByDuration(duration) {
-
+    let red = 0;
+    let green =0;
+    if (duration < 120){
+      green = 255
+      return `rgb(${red},${green},0)`
+    }
+    else if (duration > 420){
+      red = 255;
+      return `rgb(${red},${green},0)`
+    }
+    else{
+      red = duration /255 * 100
+      green = 255 - red
+      return `rgb(${red},${green},120)`
+    }
   }
