@@ -7,13 +7,15 @@
 let currPlayedSongId = 0;
 let timer = 0;
 setInterval(() => {
+  if (currPlayedSongId){
     timer += 1;
-}, 1000);
-console.log(document.getElementById(currPlayedSongId))
-function playSong(songId) {
-    if (timer ===  document.getElementById(currPlayedSongId)){
-        document.getElementById(currPlayedSongId).style.backgroundColor = null
+    if (timer ===  getSongById(currPlayedSongId).duration){
+      document.getElementById(currPlayedSongId).style.backgroundColor = null
     }
+  }
+}, 1000);
+function playSong(songId) {
+    timer = 0;
     if (currPlayedSongId)
         document.getElementById(currPlayedSongId).style.backgroundColor = null
     document.getElementById(songId).style.backgroundColor = 'green';

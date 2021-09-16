@@ -37,7 +37,7 @@ const player = {
             title: "All is One",
             album: "All is One",
             artist: "Orphaned Land",
-            duration: 5,
+            duration: 270,
             coverArt: "./images/cover_art/orphaned_land_all_is_one.jpg",
         },
         {
