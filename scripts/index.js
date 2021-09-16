@@ -9,11 +9,17 @@ let timer = 0;
 setInterval(() => {
   if (currPlayedSongId){
     timer += 1;
-    console.log(getSongById(parseInt(currPlayedSongId)))
-    if (timer ===  getSongById(currPlayedSongId).duration){
-      document.getElementById(currPlayedSongId).style.backgroundColor = null
-      currPlayedSongId =  document.getElementById(currPlayedSongId).nextSibling.id
-      playSong(currPlayedSongId)
+    if (timer ===  getSongById(parseInt(currPlayedSongId)).duration){
+      if (document.getElementById(currPlayedSongId).nextSibling === null){
+        document.getElementById(currPlayedSongId).style.backgroundColor = null
+        currPlayedSongId =0;
+        timer = 0;
+      }
+      else{
+        document.getElementById(currPlayedSongId).style.backgroundColor = null
+        currPlayedSongId =  document.getElementById(currPlayedSongId).nextSibling.id
+        playSong(currPlayedSongId)
+      }
     }
   }
 }, 1000);

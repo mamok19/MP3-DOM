@@ -45,7 +45,7 @@ const player = {
             title: "As a Stone",
             album: "Show Us What You Got",
             artist: "Full Trunk",
-            duration: 259,
+            duration: 2,
             coverArt: "./images/cover_art/full_trunk_as_a_stone.jpg",
         },
         {
@@ -53,7 +53,7 @@ const player = {
             title: "Sons of Winter and Stars",
             album: "Time I",
             artist: "Wintersun",
-            duration: 811,
+            duration: 2,
             coverArt: "./images/cover_art/wintersun_sons_of_winter_and_stars.jpg",
         },
     ],
