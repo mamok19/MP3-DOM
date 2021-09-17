@@ -42,8 +42,7 @@ function removeSong(songId) {
  * Adds a song to the player, and updates the DOM to match.
  */
 function addSong({ title, album, artist, duration, coverArt }) {
-    player.songs.push({})
-    
+    player.songs.push({createSongElement(title, album, artist, duration, coverArt )})
 }
 
 /**
