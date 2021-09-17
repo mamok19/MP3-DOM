@@ -148,6 +148,6 @@ function changeColorByDuration(duration) {
     } else {
         red = (duration / 255) * 100
         green = 255 - red
-        return `rgb(${red},${green},120)`
+        return `rgb(${red},${green},0)`
     }
 }
