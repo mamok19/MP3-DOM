@@ -51,7 +51,6 @@ function removeSong(id) {
  */
 function addSong(title = " ", album = " ", artist = " ", duration = '00:00', coverArt) {
     const id = genarateIDSongs();
-    console.log(title, album)
     const newSong ={
         ['id']: id,
         ['title']: title,
@@ -89,7 +88,6 @@ function handleAddSongEvent(event) {
     const artist =document.getElementById('artist').value
     const duration =document.getElementById('duration').value
     const coverArt = document.getElementById('cover-art').value
-    console.log(title,album,artist,duration,coverArt)
     addSong(title,album,artist,duration,coverArt)
 }
 
@@ -99,9 +97,9 @@ function handleAddSongEvent(event) {
 function createSongElement({ id, title, album, artist, duration, coverArt }) {
     const songEl = createElement("div", [], ["songs"], {})
     songEl.setAttribute("id", id)
-    songEl.appendChild(createElement("h1", [title]))
-    songEl.appendChild(createElement("span", [album]))
-    songEl.appendChild(createElement("h2", [artist]))
+    songEl.appendChild(createElement("h1", ["title: ",title]))
+    songEl.appendChild(createElement("span", ["album: ",album]))
+    songEl.appendChild(createElement("h2", ["artist: ",artist]))
     songEl.appendChild(
         createElement("p", [" duration " + fromSecondsToMinuts(duration)], ["duration"], {
             style: `background-color:${changeColorByDuration(duration)};`,
@@ -109,7 +107,7 @@ function createSongElement({ id, title, album, artist, duration, coverArt }) {
     )
     songEl.appendChild(createElement('h5',['🎶'],['start', 'button']))
     songEl.appendChild(createElement('h5',['❌'],['remove','button']))
-    songEl.appendChild(createElement("img", [], [], { src: coverArt }))
+    songEl.appendChild(createElement("img", [], ["song-img"], { src: coverArt }))
     return songEl
 }
 /**
@@ -161,9 +159,10 @@ function createSongElement({ id, title, album, artist, duration, coverArt }) {
  * Inserts all songs in the player as DOM elements into the songs list.
  */
 function generateSongs() {
-    const songs = document.getElementById("songs")
-    for (const song of player.songs) {
-        songs.appendChild(createSongElement(song))
+    const songsEL = document.getElementById("songs")
+    const songList = sortSongs(player.songs)
+    for (const song of songList) {
+        songsEL.appendChild(createSongElement(song))
     }
 }
 
@@ -172,8 +171,9 @@ function generateSongs() {
  */
 function generatePlaylists() {
     const playlists = document.getElementById("playlists")
-    for (let playlist of player.playlists) {
-        playlists.appendChild(createPlaylistElement(playlist))
+    const playListArr = sortPlalists(player.playlists)
+    for (let play of playListArr) {
+        playlists.appendChild(createPlaylistElement(play))
     }
     
 }
@@ -301,4 +301,45 @@ function genarateIDPlaylist() {
         }
     }
     throw "non-existent song ID"
+  }
+
+  function sortSongs(songs){
+    let songTitles = []
+    let sortedSongs= []
+    for (let index = 0; index <songs.length; index++) {
+        songTitles.push(songs[index].title)
+      }
+    songTitles.sort()
+    for (let i = 0; i < songTitles.length; i++) {
+      sortedSongs.push(getSongByTitle(songTitles[i]))
+    }
+    return sortedSongs
+  }
+
+  function sortPlalists(playlist){
+    let playlistNames = []
+    let sortedPlalists= []
+    for (let index = 0; index <playlist.length; index++) {
+        playlistNames.push(playlist[index].name)
+      }
+    playlist.sort()
+    for (let i = 0; i < playlistNames.length; i++) {
+      sortedPlalists.push(getPlaylistByName(playlistNames[i]))
+    }
+    return sortedPlalists
+  }
+  
+  function getSongByTitle(title) {
+    for (let j = 0; j < player.songs.length; j++) {
+      if (player.songs[j].title === title) {
+        return player.songs[j]
+      }
+    }
+  }
+  function getPlaylistByName(name) {
+    for (let j = 0; j < player.playlists.length; j++) {
+      if (player.playlists[j].name === name) {
+        return player.playlists[j]
+      }
+    }
   }
