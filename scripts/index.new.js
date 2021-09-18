@@ -49,8 +49,9 @@ function removeSong(id) {
 /**
  * Adds a song to the player, and updates the DOM to match.
  */
-function addSong({ title = " ", album = " ", artist = " ", duration = '00:00', coverArt = 'donkey.jpeg'}) {
+function addSong(title = " ", album = " ", artist = " ", duration = '00:00', coverArt) {
     const id = genarateIDSongs();
+    console.log(title, album)
     const newSong ={
         ['id']: id,
         ['title']: title,
@@ -83,12 +84,12 @@ function handleRemoveSongClickEvent(event) {
  * @param {MouseEvent} event - the click event
  */
 function handleAddSongEvent(event) {
-    const title = document.getElementsByName('title')
-    console.log(title)
-    const album = document.getElementsByName('album')
-    const artist = document.getElementsByName('artist')
-    const duration = document.getElementsByName('duration')
-    const coverArt = document.getElementsByName('cover-art')
+    const title = document.getElementById('title').value
+    const album = document.getElementById('album').value
+    const artist =document.getElementById('artist').value
+    const duration =document.getElementById('duration').value
+    const coverArt = document.getElementById('cover-art').value
+    console.log(title,album,artist,duration,coverArt)
     addSong(title,album,artist,duration,coverArt)
 }
 
