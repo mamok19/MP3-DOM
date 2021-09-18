@@ -1,3 +1,4 @@
+
 /**
  * Plays a song from the player.
  * Playing a song means changing the visual indication of the currently playing song.
@@ -34,15 +35,40 @@
  *
  * @param {Number} songId - the ID of the song to remove
  */
-function removeSong(songId) {
-    // Your code here
+function removeSong(id) {
+    if (!idIsTakenQUSTION(id)) {
+        throw 'non-existent ID'
+      }
+      player.songs.splice(
+        player.songs.find((song) => song.id === id),
+        1
+      )
+      for (let i = 0; i < player.playlists.length; i++) {
+        for (let j = 0; j < player.playlists[i].songs.length; j++) {
+          if (player.playlists[i].songs[j] === id) {
+            player.playlists[i].songs.splice(j, 1)
+          }
+        }
+      }
+    generateSongs()
 }
 
 /**
  * Adds a song to the player, and updates the DOM to match.
  */
 function addSong({ title, album, artist, duration, coverArt }) {
-    player.songs.push({createSongElement(title, album, artist, duration, coverArt )})
+    if (idIsTakenQUSTION(id)) {
+        throw id
+      }
+      player.songs.push({
+        ['title']: title,
+        ['album']: album,
+        ['artist']: artist,
+        ['duration']: formatMinutsToSeconds(duration),
+        ['id']: genarateIDSongs(),
+        ['coverArt']: coverArt,
+      })
+    generateSongs()   
 }
 
 /**
@@ -52,7 +78,11 @@ function addSong({ title, album, artist, duration, coverArt }) {
  * @param {MouseEvent} event - the click event
  */
 function handleSongClickEvent(event) {
-    // Your code here
+    playSong(event.target.parentElement.id)
+}
+
+function handleRemoveSongClickEvent(event) {
+    removeSong(event.target.parentElement.id)
 }
 
 /**
@@ -61,7 +91,12 @@ function handleSongClickEvent(event) {
  * @param {MouseEvent} event - the click event
  */
 function handleAddSongEvent(event) {
-    // Your code here
+    const title = document.getElementsByName('title')
+    const album = document.getElementsByName('album')
+    const artist = document.getElementsByName('artist')
+    const duration = document.getElementsByName('duration')
+    const coverArt = document.getElementsByName('cover-art')
+    addSong(title,album,artist,duration,coverArt)
 }
 
 /**
@@ -78,8 +113,9 @@ function createSongElement({ id, title, album, artist, duration, coverArt }) {
             style: `background-color:${changeColorByDuration(duration)};`,
         })
     )
+    songEl.appendChild(createElement('h5',['🎶'],['start', 'button']))
+    songEl.appendChild(createElement('h5',['❌'],['remove','button']))
     songEl.appendChild(createElement("img", [], [], { src: coverArt }))
-    songEl.setAttribute("onclick", `playSong(${id})`)
     return songEl
 }
 /**
@@ -147,7 +183,19 @@ function generatePlaylists() {
     }
     
 }
-
+function eventListener(event) {
+    switch(event.target){
+        case event.target.classList.includes('start'):
+            handleSongClickEvent(event)
+            break;
+        case event.target.classList.includes('remove'):
+            handleRemoveSongClickEvent(event)
+            break;
+        case event.target.id === "add-button" :
+            handleAddSongEvent(event)
+    }
+}
+document.addEventListener('click', eventListener);
 // Creating the page structure
 generateSongs()
 generatePlaylists()
@@ -235,3 +283,29 @@ function genarateIDPlaylist() {
     }
   }
 
+  function removeSong(id) {
+    if (!idIsTakenQUSTION(id)) {
+      throw 'non-existent ID'
+    }
+    player.songs.splice(
+      player.songs.find((song) => song.id === id),
+      1
+    )
+    for (let i = 0; i < player.playlists.length; i++) {
+      for (let j = 0; j < player.playlists[i].songs.length; j++) {
+        if (player.playlists[i].songs[j] === id) {
+          player.playlists[i].songs.splice(j, 1)
+        }
+      }
+    }
+  }
+
+  function idIsTakenQUSTION(id) {
+    for (let i = 0; i < player.songs.length; i++) {
+      if (player.songs[i].id === id) {
+        return true
+      }
+    }
+    return false
+  }
+  
