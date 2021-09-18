@@ -25,7 +25,9 @@
  }, 1000)
  function playSong(songId) {
      timer = 0
-     if (currPlayedSongId) document.getElementById(currPlayedSongId).style.backgroundColor = null
+     if (currPlayedSongId) {
+         document.getElementById(currPlayedSongId).style.backgroundColor = null
+     }
      document.getElementById(songId).style.backgroundColor = "green"
      currPlayedSongId = songId
  }
@@ -36,39 +38,29 @@
  * @param {Number} songId - the ID of the song to remove
  */
 function removeSong(id) {
-    if (!idIsTakenQUSTION(id)) {
-        throw 'non-existent ID'
-      }
-      player.songs.splice(
-        player.songs.find((song) => song.id === id),
-        1
-      )
-      for (let i = 0; i < player.playlists.length; i++) {
-        for (let j = 0; j < player.playlists[i].songs.length; j++) {
-          if (player.playlists[i].songs[j] === id) {
-            player.playlists[i].songs.splice(j, 1)
-          }
-        }
-      }
-    generateSongs()
+    if (id === parseInt(currPlayedSongId)){
+        currPlayedSongId = 0;
+    }
+    const index = getIndexById(id)
+    player.songs.splice(index, 1);
+    document.getElementById(id).remove()
 }
 
 /**
  * Adds a song to the player, and updates the DOM to match.
  */
-function addSong({ title, album, artist, duration, coverArt }) {
-    if (idIsTakenQUSTION(id)) {
-        throw id
-      }
-      player.songs.push({
+function addSong({ title = " ", album = " ", artist = " ", duration = '00:00', coverArt = 'donkey.jpeg'}) {
+    const id = genarateIDSongs();
+    const newSong ={
+        ['id']: id,
         ['title']: title,
         ['album']: album,
         ['artist']: artist,
         ['duration']: formatMinutsToSeconds(duration),
-        ['id']: genarateIDSongs(),
         ['coverArt']: coverArt,
-      })
-    generateSongs()   
+      }
+    player.songs.push(newSong)
+    document.getElementById("songs").appendChild(createSongElement(newSong));
 }
 
 /**
@@ -82,7 +74,7 @@ function handleSongClickEvent(event) {
 }
 
 function handleRemoveSongClickEvent(event) {
-    removeSong(event.target.parentElement.id)
+    removeSong(parseInt(event.target.parentElement.id))
 }
 
 /**
@@ -92,6 +84,7 @@ function handleRemoveSongClickEvent(event) {
  */
 function handleAddSongEvent(event) {
     const title = document.getElementsByName('title')
+    console.log(title)
     const album = document.getElementsByName('album')
     const artist = document.getElementsByName('artist')
     const duration = document.getElementsByName('duration')
@@ -184,24 +177,25 @@ function generatePlaylists() {
     
 }
 function eventListener(event) {
-    switch(event.target){
-        case event.target.classList.includes('start'):
+    switch(event.target.classList[0]){
+        case 'start':
             handleSongClickEvent(event)
             break;
-        case event.target.classList.includes('remove'):
+        case 'remove':
             handleRemoveSongClickEvent(event)
             break;
-        case event.target.id === "add-button" :
+        }
+        if(event.target.id === "add-button"){
             handleAddSongEvent(event)
+        }
     }
-}
 document.addEventListener('click', eventListener);
 // Creating the page structure
 generateSongs()
 generatePlaylists()
 
-// Making the add-song-button actually do something
-document.getElementById("add-button").addEventListener("click", handleAddSongEvent)
+// // Making the add-song-button actually do something
+// document.getElementById("add-button").addEventListener("click", handleAddSongEvent)
 
 //help functions
 
@@ -266,6 +260,7 @@ function genarateIDPlaylist() {
         return i
       }
     }
+    return player.playlists.length + 1
   }
 
   function genarateIDSongs() {
@@ -281,25 +276,8 @@ function genarateIDPlaylist() {
         return i
       }
     }
+    return player.songs.length + 1
   }
-
-  function removeSong(id) {
-    if (!idIsTakenQUSTION(id)) {
-      throw 'non-existent ID'
-    }
-    player.songs.splice(
-      player.songs.find((song) => song.id === id),
-      1
-    )
-    for (let i = 0; i < player.playlists.length; i++) {
-      for (let j = 0; j < player.playlists[i].songs.length; j++) {
-        if (player.playlists[i].songs[j] === id) {
-          player.playlists[i].songs.splice(j, 1)
-        }
-      }
-    }
-  }
-
   function idIsTakenQUSTION(id) {
     for (let i = 0; i < player.songs.length; i++) {
       if (player.songs[i].id === id) {
@@ -308,4 +286,18 @@ function genarateIDPlaylist() {
     }
     return false
   }
-  
+
+  function formatMinutsToSeconds(duration) {
+    let seconds =
+      parseInt(duration.slice(0, 2)) * 60 + parseInt(duration.slice(3, 5))
+    return seconds
+  }
+
+  function getIndexById(id){
+    for (let j = 0; j < player.songs.length; j++) {
+        if (player.songs[j].id === id) {
+            return j
+        }
+    }
+    throw "non-existent song ID"
+  }
