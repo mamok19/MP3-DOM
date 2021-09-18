@@ -2,7 +2,7 @@
 <html lang="en">
     <head>
         <meta charset="UTF-8" />
-        <title>Awesome MP3 Player</title>
+        <title>mp3 Player</title>
         <link rel="shortcut icon" type="image/x-icon" href="./images/icon.png" />
         <link rel="stylesheet" href="./style.css">
         <script src="./scripts/player.js"></script>
@@ -13,16 +13,15 @@
         <div id="add-section">
             <h2>Add a new song</h2>
             <div id="inputs">
-                <input name="title" placeholder="Title">
-                <input name="album" placeholder="Album">
-                <input name="artist" placeholder="Artist">
-                <input name="duration" placeholder="Duration (mm:ss)">
-                <input name="cover-art" placeholder="Cover art link">
+                <input name="title" id="title" placeholder="Title">
+                <input name="album" id="album" placeholder="Album">
+                <input name="artist" id="artist" placeholder="Artist">
+                <input name="duration" id="duration" placeholder="Duration (mm:ss)">
+                <input name="cover-art" id="cover-art" placeholder="Cover art link">
             </div>
             <button id="add-button">Add</button>
         </div>
         <div id="songs">
-            <h2>Songs</h2>
             <div class="list">
                 <!-- <div class="song">
                     <div class="left">
@@ -44,7 +43,6 @@
             </div>
         </div>
         <div id="playlists">
-            <h2>Playlists</h2>
             <div class="list">
                 <!-- <div class="playlist">
                     <div class="left">
